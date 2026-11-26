@@ -5,7 +5,7 @@ export default async function HomePage() {
   const products = await getProducts();
 
   return (
-    <main>
+    <section>
       <h1>Online Shop</h1>
       <ul>
         {products.map((product) => (
@@ -14,6 +14,6 @@ export default async function HomePage() {
           </li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 }
