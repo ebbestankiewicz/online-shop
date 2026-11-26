@@ -17,4 +17,4 @@ npm run dev
 
 ## Live demo
 
-_Coming soon_
+(https://online-shop-tau-red.vercel.app/)
