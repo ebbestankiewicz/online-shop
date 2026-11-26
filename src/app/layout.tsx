@@ -3,6 +3,7 @@ import { DM_Serif_Display, Karla } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Toaster } from "sonner";
 
 const serif = DM_Serif_Display({
   subsets: ["latin"],
@@ -31,6 +32,17 @@ export default function RootLayout({
         <Header />
         <main className="page-container flex-1 py-8">{children}</main>
         <Footer />
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: "var(--color-ink)",
+              color: "var(--color-cream)",
+              border: "none",
+              fontFamily: "var(--font-karla)",
+            },
+          }}
+        />
       </body>
     </html>
   );

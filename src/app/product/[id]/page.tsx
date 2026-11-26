@@ -8,6 +8,7 @@ import { ReviewList } from "@/components/product/ReviewList";
 import { TagList } from "@/components/product/TagList";
 import { getProductById } from "@/lib/api";
 import { getDiscountPercentage, hasDiscount } from "@/utils/price";
+import { AddToCartButton } from "@/components/product/AddToCartButton";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -99,7 +100,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <p className="text-lg leading-relaxed text-ink-soft">{description}</p>
 
-          {/* Add to cart button comes in step 6 */}
+          <div className="pt-2">
+            <AddToCartButton product={product} />
+          </div>
         </div>
       </div>
 
