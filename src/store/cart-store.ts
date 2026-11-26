@@ -7,6 +7,7 @@ export interface CartState {
   items: CartItem[];
   addItem: (product: Product) => void;
   removeItem: (id: string) => void;
+  restoreItem: (item: CartItem) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
 }
@@ -44,6 +45,13 @@ export const useCartStore = create<CartState>()(
           items: state.items.filter((item) => item.id !== id),
         })),
 
+      restoreItem: (item) =>
+        set((state) =>
+          state.items.some((existing) => existing.id === item.id)
+            ? state
+            : { items: [...state.items, item] },
+        ),
+
       updateQuantity: (id, quantity) =>
         set((state) => ({
           items:
@@ -56,7 +64,7 @@ export const useCartStore = create<CartState>()(
 
       clearCart: () => set({ items: [] }),
     }),
-    { name: "sunday-market-cart" }, // localStorage key
+    { name: "sunday-market-cart" },
   ),
 );
 
@@ -66,5 +74,11 @@ export const selectItemCount = (state: CartState): number =>
 export const selectCartTotal = (state: CartState): number =>
   state.items.reduce(
     (sum, item) => sum + item.discountedPrice * item.quantity,
+    0,
+  );
+
+export const selectCartSavings = (state: CartState): number =>
+  state.items.reduce(
+    (sum, item) => sum + (item.price - item.discountedPrice) * item.quantity,
     0,
   );
