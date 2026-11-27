@@ -1,54 +1,66 @@
-export interface ContactFormValues {
-  fullName: string;
-  subject: string;
-  email: string;
-  message: string;
+interface TextFieldProps {
+  id: string;
+  label: string;
+  value: string;
+  error?: string;
+  onChange: (value: string) => void;
+  onBlur: () => void;
+  type?: "text" | "email";
+  multiline?: boolean;
+  autoComplete?: string;
 }
 
-export type ContactField = keyof ContactFormValues;
-export type ContactFormErrors = Partial<Record<ContactField, string>>;
+export function TextField({
+  id,
+  label,
+  value,
+  error,
+  onChange,
+  onBlur,
+  type = "text",
+  multiline = false,
+  autoComplete,
+}: TextFieldProps) {
+  const errorId = `${id}-error`;
 
-type Validator = (value: string) => string | undefined;
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-function minLength(label: string, min: number): Validator {
-  return (value) => {
-    const length = value.trim().length;
-    if (length === 0) return `${label} is required.`;
-    if (length < min) return `${label} must be at least ${min} characters.`;
-    return undefined;
+  const sharedProps = {
+    id,
+    name: id,
+    value,
+    onBlur,
+    "aria-invalid": Boolean(error),
+    "aria-describedby": error ? errorId : undefined,
+    className: `w-full rounded-xl bg-paper px-4 py-3 transition focus:outline-none focus:ring-2 focus:ring-terracotta ${
+      error ? "ring-2 ring-terracotta-dark" : "ring-1 ring-ink/15"
+    }`,
   };
-}
 
-const validators: Record<ContactField, Validator> = {
-  fullName: minLength("Full name", 3),
-  subject: minLength("Subject", 3),
-  email: (value) => {
-    if (!value.trim()) return "Email is required.";
-    if (!EMAIL_PATTERN.test(value.trim()))
-      return "Please enter a valid email, e.g. name@example.com.";
-    return undefined;
-  },
-  message: minLength("Message", 10),
-};
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor={id} className="block text-sm font-bold">
+        {label}
+      </label>
 
-export function validateField(
-  field: ContactField,
-  value: string,
-): string | undefined {
-  return validators[field](value);
-}
+      {multiline ? (
+        <textarea
+          {...sharedProps}
+          rows={6}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      ) : (
+        <input
+          {...sharedProps}
+          type={type}
+          autoComplete={autoComplete}
+          onChange={(event) => onChange(event.target.value)}
+        />
+      )}
 
-export function validateContactForm(
-  values: ContactFormValues,
-): ContactFormErrors {
-  const errors: ContactFormErrors = {};
-
-  for (const field of Object.keys(validators) as ContactField[]) {
-    const error = validateField(field, values[field]);
-    if (error) errors[field] = error;
-  }
-
-  return errors;
+      {error && (
+        <p id={errorId} className="text-sm font-semibold text-terracotta-dark">
+          {error}
+        </p>
+      )}
+    </div>
+  );
 }
