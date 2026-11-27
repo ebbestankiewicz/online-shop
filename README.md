@@ -3,7 +3,7 @@
 An online shop built for the Noroff **JavaScript Frameworks** course assignment.
 Browse products, search and sort, add items to a persistent cart and check out.
 
-**Live demo:** (https://DIN-VERCEL-URL.vercel.app)
+**Live demo:** https://online-shop-tau-red.vercel.app/
 
 ## Features
 
